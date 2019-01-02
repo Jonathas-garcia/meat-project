@@ -370,5 +370,79 @@
       "restaurantId": "tasty-treats"
     }
   ],
-  "orders": []
+  "orders": [
+    {
+      "address": "Rua Itapipinas",
+      "number": "302",
+      "optionalAddress": "Casa 3",
+      "paymentOption": "DEB",
+      "orderItems": [
+        {
+          "quantity": 2,
+          "menuId": "capp"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "address": "Rua Itapipinas",
+      "number": "302",
+      "optionalAddress": "Casa 3",
+      "paymentOption": "REF",
+      "orderItems": [
+        {
+          "quantity": 2,
+          "menuId": "burger"
+        },
+        {
+          "quantity": 1,
+          "menuId": "fries"
+        },
+        {
+          "quantity": 1,
+          "menuId": "coke.png"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "address": "asdasd",
+      "number": "1",
+      "optionalAddress": "",
+      "paymentOption": "MON",
+      "orderItems": [
+        {
+          "quantity": 1,
+          "menuId": "cup-cake"
+        }
+      ],
+      "id": 3
+    },
+    {
+      "address": "asdasd",
+      "number": "1",
+      "optionalAddress": "",
+      "paymentOption": "MON",
+      "orderItems": [
+        {
+          "quantity": 1,
+          "menuId": "capp"
+        }
+      ],
+      "id": 4
+    },
+    {
+      "address": "asdasd",
+      "number": "12",
+      "optionalAddress": "",
+      "paymentOption": "MON",
+      "orderItems": [
+        {
+          "quantity": 1,
+          "menuId": "capp"
+        }
+      ],
+      "id": 5
+    }
+  ]
 }
