@@ -1,5 +1,5 @@
 import { MEAT_API } from 'app/app.api';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ShoppingCartService } from './../restaurant-detail/shopping-cart/shopping-cart.service';
 import { Injectable } from '@angular/core';
 import { CartItem } from 'app/restaurant-detail/shopping-cart/cart-item.model';
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class OrderService {
 
-    constructor(private cartService: ShoppingCartService, private http: Http) {
+    constructor(private cartService: ShoppingCartService, private http: HttpClient) {
     }
 
     itemsValue(): number {
@@ -41,14 +41,9 @@ export class OrderService {
         headers.append('Content-type', 'application/json');
 
 
-        return this.http.post(`${MEAT_API}/orders`,
-            JSON.stringify(order),
-            new RequestOptions({ headers: headers }))
-            .map(response => response.json())
-            // tslint:disable-next-line:no-shadowed-variable
-            .map(order => {
-                return order.id;
-            });
+        return this.http.post<Order>(`${MEAT_API}/orders`, order)
+            .map(o => o.id);
+
     }
 
 }

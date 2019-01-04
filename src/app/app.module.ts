@@ -1,3 +1,4 @@
+import { RouterModule, PreloadAllModules } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from './shared/shared.module';
@@ -6,8 +7,9 @@ import { ROUTES } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, LOCALE_ID } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { RouterModule, PreloadAllModules } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -22,7 +24,7 @@ import { ReviewsComponent } from './restaurant-detail/reviews/reviews.component'
 
 import { OrderSummaryComponent } from './order/order-summary/order-summary.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+
 
 
 
@@ -45,7 +47,7 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     SharedModule.forRoot(),
     RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules })
   ],
