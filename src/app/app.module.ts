@@ -1,3 +1,4 @@
+import { ApplicationErrorHandler } from './app.error-handler';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -6,9 +7,12 @@ import { SharedModule } from './shared/shared.module';
 import { ROUTES } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { LocationStrategy, HashLocationStrategy, registerLocaleData} from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt, 'pt');
 
 
 import { AppComponent } from './app.component';
@@ -24,6 +28,8 @@ import { ReviewsComponent } from './restaurant-detail/reviews/reviews.component'
 
 import { OrderSummaryComponent } from './order/order-summary/order-summary.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { LoginComponent } from './security/login/login.component';
+import { UserDetailComponent } from './header/user-detail/user-detail.component';
 
 
 
@@ -41,7 +47,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
     MenuItemComponent,
     ReviewsComponent,
     OrderSummaryComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    LoginComponent,
+    UserDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +59,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     SharedModule.forRoot(),
     RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules })
   ],
-  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }, { provide: LOCALE_ID, useValue: 'pt-BR' }],
+  providers: [/*{ provide: LocationStrategy, useClass: HashLocationStrategy }, */{ provide: LOCALE_ID, useValue: 'pt' },
+  { provide: ErrorHandler, useClass: ApplicationErrorHandler }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

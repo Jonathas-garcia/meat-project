@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'mt-shopping-cart',
   templateUrl: './shopping-cart.component.html',
+  preserveWhitespaces: true,
   animations: [
     trigger('row', [
       state('ready', style({ opacity: 1 })),

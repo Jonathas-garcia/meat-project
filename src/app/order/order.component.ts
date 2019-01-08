@@ -4,7 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { RadioOption } from 'app/shared/radio/radio-option.model';
 import { Order, OrderItem } from './order.model';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'mt-order',
@@ -16,7 +17,9 @@ export class OrderComponent implements OnInit {
   emailPattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
   numberPattern = /^[0-9]*$/;
 
+
   orderForm: FormGroup;
+  orderId: string;
   delivery = 8;
 
   paymentOptions: RadioOption[] = [
@@ -29,15 +32,20 @@ export class OrderComponent implements OnInit {
   constructor(private orderService: OrderService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.orderForm = this.formBuilder.group({
-      name: this.formBuilder.control('', [Validators.required, Validators.minLength(4)]),
+    this.orderForm = new FormGroup({
+      name: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(4)]
+      }),
       email: this.formBuilder.control('', [Validators.required, Validators.pattern(this.emailPattern)]),
       emailConfirmation: this.formBuilder.control('', [Validators.required, Validators.pattern(this.emailPattern)]),
       address: this.formBuilder.control('', [Validators.required, Validators.minLength(5)]),
       number: this.formBuilder.control('', [Validators.required, Validators.pattern(this.numberPattern)]),
       optionalAddress: this.formBuilder.control(''),
-      paymentOption: this.formBuilder.control('', [Validators.required])
-    }, { validator: OrderComponent.equalsTo });
+      paymentOption: new FormControl('', {
+        validators: [Validators.required],
+        updateOn: 'change'
+      })
+    }, { validators: [OrderComponent.equalsTo], updateOn: 'blur' });
   }
 
   // tslint:disable-next-line:member-ordering
@@ -49,7 +57,7 @@ export class OrderComponent implements OnInit {
     }
 
     if (email.value !== emailConfirmation.value) {
-      return {emailsNotMatch: true};
+      return { emailsNotMatch: true };
     }
     return undefined;
 
@@ -77,12 +85,22 @@ export class OrderComponent implements OnInit {
 
   checkOrder(order: Order) {
     order.orderItems = this.cartItems().map((item: CartItem) => new OrderItem(item.quantity, item.menuItem.id));
-    this.orderService.checkOrder(order).subscribe((orderId: string) => {
-      this.router.navigate(['order-summary']);
-      console.log('Compra concluída: ' + orderId);
-      this.orderService.clear();
-    });
-    console.log(order);
+
+    this.orderService.checkOrder(order)
+      .pipe(
+        tap((orderId: string) => {
+        this.orderId = orderId;
+      }))
+      .subscribe((orderId: string) => {
+        this.router.navigate(['order-summary']);
+        console.log('Compra concluída: ' + orderId);
+        this.orderService.clear();
+      });
+
+  }
+
+  isOrderCompleted(): boolean {
+    return this.orderId !== undefined;
   }
 
 }
